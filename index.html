@@ -1,0 +1,62 @@
+<html>
+<head>
+<script type='text/javascript' src='Sexy.js'></script>
+<script type='text/javascript' src="http://d3js.org/d3.v3.min.js"></script>
+<script type='text/javascript'>  
+document.addEventListener('DOMContentLoaded',function(){
+  var svg = d3.select("body").append("svg")
+    .attr("width", 400)
+    .attr("height", 400);
+
+  var svg2 = d3.select("body").append("svg")
+    .attr("width", 400)
+    .attr("height", 400);
+  
+  svg.append("rect")
+    .attr("width", 400)
+    .attr("height", 300)
+    .attr("x", 0)
+    .attr("y", 0)
+    .attr('stroke', 'black')
+    .attr('fill', 'none');
+
+  svg2.append("rect")
+    .attr("width", 400)
+    .attr("height", 300)
+    .attr("x", 0)
+    .attr("y", 0)
+    .attr('stroke', 'black')
+    .attr('fill', 'none');
+
+  var grid1 = new Sexy.Grid(400,100,50);
+
+  svg.selectAll('.hex')
+    .data(grid1.hexes)
+    .enter().append('path')
+      .attr('d',function(d){ return Sexy.hex2path(d.x, d.y, grid1.r) })
+      .attr('fill',function(d){return 'rgba(255,0,0,'+d.data+')'})
+      .attr('stroke',function(d){
+        if(d.center.p==0&&d.center.q==0){return 'black'} else {return 'red'}
+      })
+      .attr('class','hex')
+      .on('click', function(d){alert('p:'+d.center.p+'\nq:'+d.center.q)});
+
+  var grid2 = new Sexy.Grid(400,300,50);
+
+  svg2.selectAll('.hex')
+    .data(grid2.hexes)
+    .enter().append('path')
+      .attr('d',function(d){ return Sexy.hex2path(d.x, d.y, grid2.r) })
+      .attr('fill',function(d){return 'rgba(0,255,0,'+d.data+')'})
+      .attr('stroke',function(d){
+        if(d.center.p==0&&d.center.q==0){return 'black'} else {return 'red'}
+      })
+      .attr('class','hex')
+      .on('click', function(d){alert('p:'+d.center.p+'\nq:'+d.center.q)});
+},false);
+</script>
+</head>
+<body>
+  <h1>sexyhexes test</h1>
+</body>
+</html>
