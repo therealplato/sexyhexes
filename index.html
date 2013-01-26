@@ -1,62 +1,118 @@
 <html>
 <head>
 <script type='text/javascript' src='Sexy.js'></script>
-<script type='text/javascript' src="http://d3js.org/d3.v3.min.js"></script>
+<script type='text/javascript' src='d3.v3.min.js'></script>
 <script type='text/javascript'>  
 document.addEventListener('DOMContentLoaded',function(){
-  var svg = d3.select("body").append("svg")
-    .attr("width", 400)
-    .attr("height", 400);
+  console.log('Hi Sexy! Creating grids and placing svgs');
+  var grid1 = new Sexy.Grid(400,100,10);
+  var grid2 = new Sexy.Grid(400,300,10);
+  var grid3 = new Sexy.Grid(400,600,50);
 
-  var svg2 = d3.select("body").append("svg")
+  var svg1 = d3.select("#d1").append("svg")
     .attr("width", 400)
-    .attr("height", 400);
-  
-  svg.append("rect")
+    .attr("height", 100);
+  var svg2 = d3.select("#d2").append("svg")
     .attr("width", 400)
-    .attr("height", 300)
+    .attr("height", 300);
+  var svg3 = d3.select("#d3").append("svg")
+    .attr("width", 400)
+    .attr("height", 600);
+
+  svg1.append("rect")
+    .attr("width", 400)
+    .attr("height", 100)
     .attr("x", 0)
     .attr("y", 0)
-    .attr('stroke', 'black')
-    .attr('fill', 'none');
-
+    .attr('stroke', 'none')
+    .attr('fill', 'rgba(255,160,25,0.2)');
   svg2.append("rect")
     .attr("width", 400)
     .attr("height", 300)
     .attr("x", 0)
     .attr("y", 0)
-    .attr('stroke', 'black')
-    .attr('fill', 'none');
+    .attr('stroke', 'none')
+    .attr('fill', 'rgba(0,0,0,0.7)');
+  
+  function update(){
+    // create a d3 selection of all hexes in svg1 and bind data
+    var oranges = svg1.selectAll('.hex')
+      .data(grid1.hexes); //an array of Sexy.Hex objects
 
-  var grid1 = new Sexy.Grid(400,100,50);
+    //.enter is run when d3 encounters a datum with no bound .hex path yet
+    oranges
+      .enter()
+      .append('path')
+        .attr('class','hex')
+        .attr('d',function(d){ return Sexy.hex2path(d.x, d.y, grid1.r) })
+        .attr('fill',function(d){return 'rgba(255,125,0,'+d.data+')'})
+        .on('click', function(d){d.clicked(function(){update()})});
+        //these last three write different strings into DOM based on datum d
 
-  svg.selectAll('.hex')
-    .data(grid1.hexes)
-    .enter().append('path')
-      .attr('d',function(d){ return Sexy.hex2path(d.x, d.y, grid1.r) })
-      .attr('fill',function(d){return 'rgba(255,0,0,'+d.data+')'})
-      .attr('stroke',function(d){
-        if(d.center.p==0&&d.center.q==0){return 'black'} else {return 'red'}
-      })
-      .attr('class','hex')
-      .on('click', function(d){alert('p:'+d.center.p+'\nq:'+d.center.q)});
+    // this is run every time update is called
+    oranges.attr('stroke',function(d){
+      if(d.selected == true){return 'red'} else {return 'none'}
+    });
 
-  var grid2 = new Sexy.Grid(400,300,50);
+      
+    var greens = svg2.selectAll('.hex')
+      .data(grid2.hexes);
 
-  svg2.selectAll('.hex')
-    .data(grid2.hexes)
-    .enter().append('path')
-      .attr('d',function(d){ return Sexy.hex2path(d.x, d.y, grid2.r) })
-      .attr('fill',function(d){return 'rgba(0,255,0,'+d.data+')'})
-      .attr('stroke',function(d){
-        if(d.center.p==0&&d.center.q==0){return 'black'} else {return 'red'}
-      })
-      .attr('class','hex')
-      .on('click', function(d){alert('p:'+d.center.p+'\nq:'+d.center.q)});
-},false);
+    greens
+    .enter()
+      .append('path')
+        .attr('class','hex')
+        .attr('d',function(d){ return Sexy.hex2path(d.x, d.y, grid2.r) })
+        .attr('fill',function(d){return 'rgba(0,255,50,'+d.data+')'})
+        .on('click', function(d){d.clicked(function(){update()})});
+
+    greens.attr('stroke',function(d){
+      if(d.selected){return 'black'} else {return 'none'}
+    });
+        
+
+    var purples = svg3.selectAll('.hex')
+      .data(grid3.hexes);
+
+    purples
+    .enter()
+      .append('path')
+        .attr('class','hex')
+        .attr('d',function(d){ return Sexy.hex2path(d.x, d.y, grid3.r) })
+        .attr('fill',function(d){ 
+          var color=[];
+          color[0]=Math.floor((d.data*256+ 80)%256);
+          color[1]=Math.floor((d.data*256+160)%256);
+          color[2]=Math.floor((d.data*256+240)%256);
+          color[3]='1';
+          var rgba = 'rgba('+color.join(',')+')';
+          return rgba;
+        });
+  }; // end of update() definition
+
+  update();
+
+},false); //DOMContentLoaded container
 </script>
+
+<style>
+  #box{position:relative}
+  h1{font-family: inconsolata, monospace}
+  #d1{width:400px; height:100px;float:left;}
+  #d2{width:400px; height:300px; margin-left:400px;}
+  #d3{width:400px; height:600px;
+    position:absolute; top:100px; left:0px;
+  }
+  .hex:hover{stroke:#2222FF}
+</style>
+
 </head>
 <body>
-  <h1>sexyhexes test</h1>
+  <h1>Sexyhexes test by plato</h1>
+  <div id='box'>
+    <div id='d1'>    </div>
+    <div id='d2'>    </div>
+    <div id='d3'>    </div>
+  </div>
 </body>
 </html>
