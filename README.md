@@ -1,10 +1,14 @@
 sexyhexes
 =========
+hex grid library for ~~nodejs and~~ browser  
+Sexy.js creates one object 'Sexy' for namespacing  
+index.html uses d3js to draw hexes and display data payloads per hex  
 
-hex grid library for ~~nodejs/~~browser  
-Browser creates one object 'Sexy' for namespacing  
-Sexy.Vertex: {p,q}  
-Sexy.Hex: {vtx,x,y,data}  
-Sexy.grid: {hexes:[]}  
-
+## Usage
 open index.html
+
+## Docs
+Sexy.Vertex: {p,q,grid}  
+Sexy.Hex: {v,x,y,data}  
+Sexy.grid: {hexes:[], lastSelected:Hex}  
+comments in source  
