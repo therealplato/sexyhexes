@@ -8,11 +8,11 @@ hex grid library for ~~nodejs and~~ browser
 payloads per hex
 
 ## Usage
-`$ git clone git@github.com:therealplato/sexyhexes.git`  
+`$ git clone git@github.com:therealplato/sexyhexes.git; cd sexyhexes;`  
 `$ firefox index.html`
 
 ## Docs
 `Sexy.Vertex = {p,q,grid}`  
 `Sexy.Hex    = {v,x,y,data}`  
 `Sexy.grid   = {hexes:[Hex...], lastSelected:Hex}`  
-comments in source  
+More comments in source  
