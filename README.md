@@ -5,7 +5,8 @@ hex grid library for ~~nodejs and~~ browser
 **index.html** uses d3js to draw hexes and display data payloads per hex  
 
 ## Usage
-open **index.html**
+`$ git clone git@github.com:therealplato/sexyhexes.git`  
+`$ firefox index.html`
 
 ## Docs
 `Sexy.Vertex = {p,q,grid}`  
