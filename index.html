@@ -33,6 +33,13 @@ document.addEventListener('DOMContentLoaded',function(){
     .attr("y", 0)
     .attr('stroke', 'none')
     .attr('fill', 'rgba(0,0,0,0.7)');
+  svg3.append("rect")
+    .attr("width", 400)
+    .attr("height", 600)
+    .attr("x", 0)
+    .attr("y", 0)
+    .attr('stroke', 'none')
+    .attr('fill', '#BBBBBB');
   
   function update(){
     // create a d3 selection of all hexes in svg1 and bind data
@@ -71,15 +78,20 @@ document.addEventListener('DOMContentLoaded',function(){
     });
         
 
-    var purples = svg3.selectAll('.hex')
+    var purples = svg3.selectAll('.otherhex')
       .data(grid3.hexes);
 
     purples
     .enter()
       .append('path')
-        .attr('class','hex')
+        .attr('class','otherhex')
         .attr('d',function(d){ return Sexy.hex2path(d.x, d.y, grid3.r) })
-        .attr('fill',function(d){ 
+        .on('click', function(d){d.clicked(function(){update()})});
+    purples 
+      .attr('fill',function(d){
+        if(d.selected){
+          return '#BBBBBB'
+        } else {
           var color=[];
           color[0]=Math.floor((d.data*256+ 80)%256);
           color[1]=Math.floor((d.data*256+160)%256);
@@ -87,7 +99,8 @@ document.addEventListener('DOMContentLoaded',function(){
           color[3]='1';
           var rgba = 'rgba('+color.join(',')+')';
           return rgba;
-        });
+        }
+      });
   }; // end of update() definition
 
   update();
@@ -96,8 +109,10 @@ document.addEventListener('DOMContentLoaded',function(){
 </script>
 
 <style>
-  #box{position:relative}
-  h1{font-family: inconsolata, monospace}
+  #box{position:relative; width:800px;}
+  h1{ width:800px;  margin:1em 0 1em 0;  background-color:#8888EE;
+      font-family:inconsolata,"droid sans mono",impact,monospace;
+      text-align:center;  font-weight:bold; }
   #d1{width:400px; height:100px;float:left;}
   #d2{width:400px; height:300px; margin-left:400px;}
   #d3{width:400px; height:600px;

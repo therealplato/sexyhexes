@@ -69,7 +69,7 @@ Sexy.Grid = function(x,y,r){
       // Converting i,j into pq: <p,q> = col * <-1,2> + row * <2,-1>
       var p = (-1*j)+( 2*i);
       var q = ( 2*j)+(-1*i);
-      var vert = new Sexy.Vertex(p, q);
+      var vert = new Sexy.Vertex(p, q, this);
       // Place hexes relative to hex origin ho_x, ho_y:
       var xy = Sexy.pq2xy(p,q,r);
       var x1 = this.ho_x+xy.x;
@@ -129,7 +129,8 @@ Sexy.pq2xy=function(p0,q0,r) {
   return {'x':x1, 'y':y1};
 };
 
-Sexy.Vertex = function(p0,q0) {
+Sexy.Vertex = function(p0, q0, grid) {
+  this.grid = grid;
   this.p=p0;    this.q=q0;    this.theta=null;
   //theta: rotation angle. 0: up/12'ck, Pi/3: 10'ck, Pi: 6'ck 2*Pi: 12'ck
   this.phaseP=((this.p%3)+3)%3;    this.phaseQ=((this.q%3)+3)%3;
@@ -137,15 +138,15 @@ Sexy.Vertex = function(p0,q0) {
 };
 
 Sexy.Hex = function(v0,x,y){
-  this.center = v0;
+  this.v = v0;
   this.x = x;
   this.y = y;
   this.data = Math.random();
   this.selected = false;
-  this.clicked = (function(what){
+  this.clicked = (function(hex){
     return function(callback){
-      Sexy.select(what);
-      console.log('Hi Sexy! @p,q <'+what.center.p+','+what.center.q+'>');
+      Sexy.select(hex);
+      console.log('Hi Sexy! @p,q <'+hex.v.p+','+hex.v.q+'>');
       callback();
     };
   })(this);
@@ -180,8 +181,8 @@ Sexy.hex2path = function(x,y,r){     //x,y center, r radius
 */
 
 Sexy.select = function(hex){
-  var old = Sexy.lastSelection || null;
+  var old = hex.v.grid.lastSelection || null;
   if(old){old.deselect();};
-  Sexy.lastSelection = hex;
+  hex.v.grid.lastSelection = hex;
   hex.selected = true;
 };
